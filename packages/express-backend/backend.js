@@ -49,13 +49,18 @@ const findUserByName = (name) => {
 
 const findUserById = (id) => {
   // use find instead of filter cuz it returns just the first occurance
-  return users["users_list"].find((user) => user["id"] === id); 
+  return users["users_list"].find((user) => user["id"] === id);
 };
 
 const addUser = (user) => {
   users["users_list"].push(user);
   return user;
-}
+};
+
+const deleteUserById = (userId) => {
+  const loc = users["users_list"].findIndex((user) => user.id === userId);
+  users["users_list"].splice(loc, 1);
+};
 
 app.get("/users", (req, res) => {
   const name = req.query.name;
@@ -78,9 +83,14 @@ app.get("/users/:id", (req, res) => {
   }
 });
 
-
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
   addUser(userToAdd);
   res.send();
-})
+});
+
+app.delete("/users/:id", (req, res) => {
+  const id = req.params.id;
+  deleteUserById(id);
+  res.send();
+});
