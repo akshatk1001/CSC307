@@ -12,18 +12,18 @@ function MyApp() {
     setCharacters(updated);
   }
 
-  function updateList(person) {
-    postUser(person)
-      .then((res) => {
-        if (res.status === 201) {
-          setCharacters([...characters, person]);
-        } else {
-          console.log(res.status);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  async function updateList(person) {
+    try {
+      const res = await postUser(person);
+
+      if (res.status === 201) {
+        setCharacters([...characters, person]);
+      } else {
+        console.log(res.status);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   function fetchUsers() {
