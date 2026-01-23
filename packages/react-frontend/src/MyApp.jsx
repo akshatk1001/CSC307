@@ -12,7 +12,7 @@ function MyApp() {
 
       if (res.status === 204) {
         setCharacters((characters) =>
-          characters.filter((character, id) => {
+          characters.filter((character) => {
             return character.id !== character_id;
           }),
         );

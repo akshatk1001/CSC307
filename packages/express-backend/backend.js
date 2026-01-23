@@ -109,5 +109,5 @@ app.post("/users", (req, res) => {
 app.delete("/users/:id", (req, res) => {
   const id = req.params.id;
   const success = deleteUserById(id);
-  res.status(success);
+  res.sendStatus(success);
 });
