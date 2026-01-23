@@ -12,6 +12,7 @@ function MyApp() {
     setCharacters(updated);
   }
 
+  // check prev. commit to see the promise/non-async version of this func
   async function updateList(person) {
     try {
       const res = await postUser(person);

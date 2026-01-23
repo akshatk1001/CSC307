@@ -59,6 +59,10 @@ const addUser = (user) => {
   return user;
 };
 
+function generateRandomId() {
+  return Math.floor(Math.random() * 900);
+}
+
 const deleteUserById = (userId) => {
   const loc = users["users_list"].findIndex((user) => user.id === userId);
   users["users_list"].splice(loc, 1);
@@ -91,7 +95,8 @@ app.get("/users/:id", (req, res) => {
 });
 
 app.post("/users", (req, res) => {
-  const userToAdd = req.body;
+  const id = generateRandomId();
+  const userToAdd = {id, ...req.body}
   addUser(userToAdd);
   res.sendStatus(201);
 });
