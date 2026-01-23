@@ -98,7 +98,7 @@ app.post("/users", (req, res) => {
   const id = generateRandomId();
   const userToAdd = {id, ...req.body}
   addUser(userToAdd);
-  res.sendStatus(201);
+  res.status(201).json(userToAdd);
 });
 
 app.delete("/users/:id", (req, res) => {

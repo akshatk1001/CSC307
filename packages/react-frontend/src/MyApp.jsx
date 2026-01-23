@@ -18,7 +18,8 @@ function MyApp() {
       const res = await postUser(person);
 
       if (res.status === 201) {
-        setCharacters([...characters, person]);
+        const newUser = await res.json();
+        setCharacters([...characters, newUser]);
       } else {
         console.log(res.status);
       }
