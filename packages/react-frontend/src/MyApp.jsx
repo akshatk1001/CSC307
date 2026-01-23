@@ -5,11 +5,23 @@ import Form from "./Form";
 function MyApp() {
   const [characters, setCharacters] = useState([]);
 
-  function removeOneCharacter(index) {
-    const updated = characters.filter((character, i) => {
-      return i != index;
-    });
-    setCharacters(updated);
+  async function removeOneCharacter(index) {
+    try {
+      const character_id = characters[index].id;
+      const res = await deleteUser(index);
+
+      if (res.status === 204) {
+        setCharacters((characters) =>
+          characters.filter((character, id) => {
+            return character.id !== character_id;
+          }),
+        );
+      } else if (res.status === 404) {
+        console.log(res.status);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   // check prev. commit to see the promise/non-async version of this func
@@ -40,6 +52,15 @@ function MyApp() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(person),
+    });
+
+    return promise;
+  }
+
+  function deleteUser(index) {
+    const character_id = characters[index].id;
+    const promise = fetch(`http://localhost:8000/users/${character_id}`, {
+      method: "DELETE",
     });
 
     return promise;

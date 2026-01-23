@@ -60,12 +60,17 @@ const addUser = (user) => {
 };
 
 function generateRandomId() {
-  return Math.floor(Math.random() * 900);
+  return String(Math.floor(Math.random() * 900));
 }
 
 const deleteUserById = (userId) => {
   const loc = users["users_list"].findIndex((user) => user.id === userId);
-  users["users_list"].splice(loc, 1);
+  if (loc === -1) {
+    return 404;
+  } else {
+    users["users_list"].splice(loc, 1);
+    return 204;
+  }
 };
 
 app.get("/users", (req, res) => {
@@ -96,13 +101,13 @@ app.get("/users/:id", (req, res) => {
 
 app.post("/users", (req, res) => {
   const id = generateRandomId();
-  const userToAdd = {id, ...req.body}
+  const userToAdd = { id, ...req.body };
   addUser(userToAdd);
   res.status(201).json(userToAdd);
 });
 
 app.delete("/users/:id", (req, res) => {
   const id = req.params.id;
-  deleteUserById(id);
-  res.send();
+  const success = deleteUserById(id);
+  res.status(success);
 });
