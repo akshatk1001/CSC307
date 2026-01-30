@@ -7,13 +7,13 @@ function MyApp() {
 
   async function removeOneCharacter(index) {
     try {
-      const character_id = characters[index].id;
+      const character_id = characters[index]._id;
       const res = await deleteUser(index);
 
       if (res.status === 204) {
         setCharacters((characters) =>
           characters.filter((character) => {
-            return character.id !== character_id;
+            return character._id !== character_id;
           }),
         );
       } else if (res.status === 404) {
@@ -58,7 +58,7 @@ function MyApp() {
   }
 
   function deleteUser(index) {
-    const character_id = characters[index].id;
+    const character_id = characters[index]._id;
     const promise = fetch(`http://localhost:8000/users/${character_id}`, {
       method: "DELETE",
     });
@@ -69,7 +69,7 @@ function MyApp() {
   useEffect(() => {
     fetchUsers()
       .then((res) => res.json())
-      .then((json) => setCharacters(json["users_list"]))
+      .then((json) => setCharacters(json))
       .catch((error) => {
         console.log(error);
       });

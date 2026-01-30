@@ -1,15 +1,17 @@
 import express from "express";
 import cors from "cors";
-import {
-  addUser,
-  getUsers,
-  findUserById,
-  deleteUserById
-} from "./services/user-service.js";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+import userService from "./services/user-service.js";
 
 // setup
 const app = express();
 const port = 8000;
+dotenv.config();
+
+const { MONGO_CONNECTION_STRING } = process.env;
+mongoose.set("debug", true);
+mongoose.connect(MONGO_CONNECTION_STRING).catch((error) => console.log(error));
 
 app.use(cors());
 app.use(express.json());
@@ -27,7 +29,7 @@ app.get("/users", async (req, res) => {
   const name = req.query.name;
   const job = req.query.job;
   try {
-    const users = await getUsers(name, job);
+    const users = await userService.getUsers(name, job);
     res.send(users);
   } catch (error) {
     res.status(500).send(error.message);
@@ -37,7 +39,7 @@ app.get("/users", async (req, res) => {
 app.get("/users/:id", async (req, res) => {
   const id = req.params.id;
   try {
-    const result = await findUserById(id);
+    const result = await userService.findUserById(id);
     if (result) {
       res.send(result);
     } else {
@@ -50,7 +52,7 @@ app.get("/users/:id", async (req, res) => {
 
 app.post("/users", async (req, res) => {
   try {
-    const savedUser = await addUser(req.body);
+    const savedUser = await userService.addUser(req.body);
     res.status(201).json(savedUser);
   } catch (error) {
     res.status(500).send(error.message);
@@ -60,7 +62,7 @@ app.post("/users", async (req, res) => {
 app.delete("/users/:id", async (req, res) => {
   const id = req.params.id;
   try {
-    const result = await deleteUserById(id);
+    const result = await userService.deleteUserById(id);
     if (result) {
       res.status(204).send();
     } else {
