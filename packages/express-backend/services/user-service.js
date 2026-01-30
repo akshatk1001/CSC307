@@ -3,10 +3,6 @@ import userModel from "../models/user.js";
 
 mongoose.set("debug", true);
 
-// mongoose
-//   .connect("mongodb://localhost:27017/users")
-//   .catch((error) => console.log(error));
-
 function getUsers(name, job) {
   let promise;
   if (name == undefined && job == undefined) {
@@ -15,6 +11,8 @@ function getUsers(name, job) {
     promise = findUserByName(name);
   } else if (job && !name) {
     promise = findUserByJob(job);
+  } else if (name && job) {
+    promise = userModel.find({ name: name, job: job });
   }
   return promise;
 }
